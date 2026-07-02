@@ -1,0 +1,151 @@
+The current Foundation page looks great visually, but I want to redesign the structure to feel like a premium product landing page rather than a long article.
+
+Keep the existing Apple-inspired design, gold color palette, animations, typography and overall premium aesthetic.
+
+Main Goals
+
+* Reduce unnecessary scrolling.
+* Remove the long chapter-by-chapter reading experience.
+* Make the page feel like a premium product showcase.
+* Focus on converting visitors into downloads.
+
+⸻
+
+1. Hero Section
+
+Keep the current hero.
+
+Title:
+THE DIGITAL FOUNDATION
+
+Subtitle:
+A practical framework for creators, builders and entrepreneurs.
+
+Primary Button:
+Get Your Free Copy
+
+⸻
+
+2. Remove the Chapter Sections
+
+Remove all long chapter sections (Chapter I, II, III, IV, V).
+
+The content already exists inside the PDF, so it does not need to be repeated on the landing page.
+
+⸻
+
+3. Add “What’s Inside”
+
+Create a clean section with premium cards.
+
+Examples:
+
+🧠 Digital Thinking
+
+🚀 Asset Building
+
+🎯 Execution Systems
+
+💎 Digital Identity
+
+📈 Long-Term Leverage
+
+Each card should contain only 1–2 short sentences.
+
+⸻
+
+4. PDF Preview Gallery
+
+This should become the main focus of the page.
+
+Create a beautiful horizontal gallery where I can add preview images from the PDF.
+
+Large premium cards.
+
+Rounded corners.
+
+Glassmorphism.
+
+Smooth hover effects.
+
+Subtle gold glow.
+
+The gallery should feel similar to browsing product images on Apple or a premium clothing website.
+
+Leave placeholders so I can easily replace them with screenshots from the PDF.
+
+⸻
+
+5. Product Features
+
+Instead of chapters, show quick highlights:
+
+✓ Premium 36-page PDF
+
+✓ Action Steps
+
+✓ Frameworks
+
+✓ Beautiful Layout
+
+✓ Instant Download
+
+✓ Future Updates
+
+Use modern cards or icons.
+
+⸻
+
+6. Pricing Section
+
+Large elegant pricing.
+
+€19.99
+
+FREE
+
+Badge:
+
+Limited Launch Offer
+
+Button:
+
+Download The Digital Foundation
+
+⸻
+
+7. Final CTA
+
+Large centered section.
+
+Headline:
+
+Don’t Wait For The Future.
+
+Create It.
+
+Button:
+
+Get Your Copy
+
+Small text underneath:
+
+AURIX.CO
+
+⸻
+
+Design Direction
+
+Less text.
+
+More visuals.
+
+More whitespace.
+
+More product-focused.
+
+Think Apple product pages, Nothing.tech, Stripe and premium digital products.
+
+The visitor should quickly understand the value of the Foundation without reading long paragraphs.
+
+The page should feel premium, modern and highly polished.

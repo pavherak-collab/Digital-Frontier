@@ -1,0 +1,167 @@
+Create a premium, cinematic webpage called The Digital Foundation for AURIX.
+
+The page should feel like reading a futuristic manifesto, not a company “About Us” page.
+
+Design
+
+* Apple-inspired minimalism
+* Dark theme (#050505 background)
+* Soft glowing gradients
+* Smooth scroll animations
+* Large typography
+* Plenty of whitespace
+* Glassmorphism cards where appropriate
+* Beautiful transitions between sections
+* Responsive for desktop and mobile
+
+Atmosphere
+
+The page should feel inspiring, futuristic and emotional.
+Imagine a mix between Apple, Nothing, Stripe and a sci-fi movie.
+
+⸻
+
+Hero Section
+
+Large centered title:
+
+THE DIGITAL FOUNDATION
+
+Subtitle:
+
+“Technology changes the world.
+
+Curiosity changes humanity.”
+
+A glowing animated orb or abstract AI-inspired visual in the background.
+
+A button:
+
+Begin the Journey
+
+Scrolling should smoothly reveal the manifesto.
+
+⸻
+
+Chapter 001 — Curiosity
+
+Heading:
+
+Curiosity
+
+Text:
+
+Every breakthrough begins with a question.
+
+Curiosity is the force that transforms impossible ideas into reality.
+
+We believe the future belongs to those who never stop asking “What if?”
+
+⸻
+
+Chapter 002 — Creation
+
+Heading:
+
+Creation
+
+Text:
+
+Creating is humanity’s greatest superpower.
+
+AI should never replace imagination.
+
+It should amplify it.
+
+⸻
+
+Chapter 003 — Technology
+
+Heading:
+
+Technology
+
+Text:
+
+Technology is not the destination.
+
+It is the bridge between imagination and reality.
+
+⸻
+
+Chapter 004 — Responsibility
+
+Heading:
+
+Responsibility
+
+Text:
+
+Every tool shapes the people who use it.
+
+Every innovation carries responsibility.
+
+Build wisely.
+
+⸻
+
+Chapter 005 — The Future
+
+Heading:
+
+The Future
+
+Text:
+
+We don’t wait for the future.
+
+We create it.
+
+Large typography for the final sentence.
+
+⸻
+
+Final Manifesto
+
+Display this beautifully centered:
+
+We believe curiosity changes the world.
+
+We believe technology should amplify creativity.
+
+We believe ideas deserve to exist.
+
+We believe creators deserve better tools.
+
+We believe the future belongs to those who build it.
+
+⸻
+
+Final Quote:
+
+DON’T WAIT FOR THE FUTURE.
+
+CREATE IT.
+
+Below it:
+
+AURIX
+
+Small caption:
+
+Creating the future, one idea at a time.
+
+⸻
+
+Animations
+
+* Fade in while scrolling
+* Parallax background
+* Floating particles
+* Smooth glowing hover effects
+* Text reveal animations
+* Premium loading animation
+
+No generic templates.
+
+The page should feel like a digital manifesto that people remember.

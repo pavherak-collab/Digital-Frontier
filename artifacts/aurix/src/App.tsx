@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ParticleBackground } from "./components/ParticleBackground";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import coverImg from "@assets/IMG_9239_1783109906529.jpg";
+import contentsImg from "@assets/IMG_9240_1783109912723.jpg";
+import pageImg from "@assets/IMG_9241_1783109918971.jpg";
 
 const GOLD = "#D4AF37";
 const GOLD_LIGHT = "#FFD86B";
@@ -44,88 +47,134 @@ const features = [
   "Future Updates",
 ];
 
-const PDFCard = ({
-  index,
+const previewPages = [
+  { img: coverImg, label: "Cover" },
+  { img: contentsImg, label: "What's Inside" },
+  { img: pageImg, label: "The Correct Order" },
+];
+
+function PDFPreviewCard({
+  img,
   label,
   delay = 0,
+  featured = false,
 }: {
-  index: number;
+  img: string;
   label: string;
   delay?: number;
-}) => {
+  featured?: boolean;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / (rect.width / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    setTilt({ x: -dy * 8, y: dx * 8 });
+  };
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+    setTilt({ x: 0, y: 0 });
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 48 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="flex-shrink-0 w-56 md:w-72"
-      style={{
-        transform: hovered ? "translateY(-10px) scale(1.02)" : "translateY(0) scale(1)",
-        transition: "transform 0.45s cubic-bezier(0.21,0.47,0.32,0.98)",
-      }}
+      transition={{ duration: 1, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+      className="flex flex-col items-center"
+      style={{ perspective: "1000px", flexShrink: 0 }}
     >
       <div
-        className="relative rounded-2xl overflow-hidden"
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={handleMouseLeave}
         style={{
-          aspectRatio: "1/1.414",
+          width: featured ? "clamp(260px, 28vw, 380px)" : "clamp(220px, 22vw, 300px)",
+          aspectRatio: "1 / 1.414",
+          transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) ${hovered ? "translateY(-12px) scale(1.03)" : "translateY(0) scale(1)"}`,
+          transition: hovered
+            ? "transform 0.12s ease-out, box-shadow 0.3s ease, border 0.3s ease"
+            : "transform 0.6s cubic-bezier(0.21,0.47,0.32,0.98), box-shadow 0.5s ease, border 0.4s ease",
+          borderRadius: "20px",
+          overflow: "hidden",
           background: "rgba(255,255,255,0.03)",
-          border: hovered ? `1px solid ${GOLD}55` : "1px solid rgba(255,255,255,0.07)",
-          backdropFilter: "blur(20px)",
+          border: hovered ? `1px solid ${GOLD}66` : `1px solid ${GOLD}22`,
           boxShadow: hovered
-            ? `0 32px 80px rgba(0,0,0,0.7), 0 0 40px ${GOLD}1A`
-            : "0 8px 40px rgba(0,0,0,0.5)",
-          transition: "border 0.4s ease, box-shadow 0.4s ease",
+            ? `0 40px 100px rgba(0,0,0,0.8), 0 0 60px ${GOLD}28, inset 0 1px 0 ${GOLD}22`
+            : `0 20px 60px rgba(0,0,0,0.6), 0 0 20px ${GOLD}0A`,
+          cursor: "default",
+          backdropFilter: "blur(8px)",
+          willChange: "transform",
         }}
       >
-        {/* Placeholder inner layout */}
-        <div className="absolute inset-0 flex flex-col justify-between p-5 md:p-7">
-          <div className="space-y-2">
-            <div className="h-2 w-3/4 rounded-full" style={{ background: `${GOLD}28` }} />
-            <div className="h-2 w-1/2 rounded-full" style={{ background: "rgba(255,255,255,0.06)" }} />
-          </div>
-          <div
-            className="w-full rounded-xl"
-            style={{
-              height: "45%",
-              background: `linear-gradient(135deg, ${GOLD}0D 0%, rgba(255,255,255,0.03) 100%)`,
-              border: `1px solid ${GOLD}18`,
-            }}
-          />
-          <div className="space-y-1.5">
-            <div className="h-2 w-full rounded-full" style={{ background: "rgba(255,255,255,0.05)" }} />
-            <div className="h-2 w-4/5 rounded-full" style={{ background: "rgba(255,255,255,0.04)" }} />
-            <div className="h-2 w-3/5 rounded-full" style={{ background: "rgba(255,255,255,0.03)" }} />
-          </div>
-        </div>
-
-        {/* Corner glow */}
-        <div
-          className="absolute top-0 right-0 w-24 h-24 pointer-events-none"
-          style={{ background: `radial-gradient(circle at top right, ${GOLD}15, transparent 70%)` }}
+        {/* Actual PDF preview image */}
+        <img
+          src={img}
+          alt={label}
+          draggable={false}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "top",
+            display: "block",
+            userSelect: "none",
+          }}
         />
-        {/* Page label */}
+
+        {/* Gold shimmer overlay on hover */}
         <div
-          className="absolute bottom-3 right-4 text-xs tracking-widest font-light"
-          style={{ color: `${GOLD}55` }}
-        >
-          {String(index + 1).padStart(2, "0")}
-        </div>
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: `linear-gradient(135deg, ${GOLD}0A 0%, transparent 50%, ${GOLD}06 100%)`,
+            opacity: hovered ? 1 : 0,
+            transition: "opacity 0.4s ease",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Top-right corner glow */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: "80px",
+            height: "80px",
+            background: `radial-gradient(circle at top right, ${GOLD}20, transparent 70%)`,
+            pointerEvents: "none",
+          }}
+        />
       </div>
-      <p className="mt-3 text-center text-xs tracking-[0.2em] uppercase" style={{ color: `${GOLD}55` }}>
+
+      {/* Label */}
+      <motion.p
+        animate={{ opacity: hovered ? 1 : 0.45 }}
+        transition={{ duration: 0.3 }}
+        className="mt-4 text-xs tracking-[0.25em] uppercase font-semibold text-center"
+        style={{ color: GOLD_MID }}
+      >
         {label}
-      </p>
+      </motion.p>
     </motion.div>
   );
-};
+}
 
 function App() {
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%", "20%"]);
-  const galleryRef = useRef<HTMLDivElement>(null);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -133,11 +182,6 @@ function App() {
     const t = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(t);
   }, []);
-
-  const scrollGallery = (dir: "left" | "right") => {
-    if (!galleryRef.current) return;
-    galleryRef.current.scrollBy({ left: dir === "left" ? -320 : 320, behavior: "smooth" });
-  };
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -182,7 +226,6 @@ function App() {
             transition={{ duration: 1.4, delay: 2, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="w-full max-w-5xl mx-auto"
           >
-            {/* Eyebrow */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -290,7 +333,7 @@ function App() {
               {whatsInside.map((item, i) => (
                 <FadeIn key={i} delay={i * 0.08}>
                   <div
-                    className="group rounded-2xl p-7 h-full transition-all duration-400"
+                    className="rounded-2xl p-7 h-full transition-all duration-400"
                     style={{
                       background: "rgba(255,255,255,0.025)",
                       border: "1px solid rgba(255,255,255,0.07)",
@@ -323,7 +366,7 @@ function App() {
                 </FadeIn>
               ))}
 
-              {/* 6th card — CTA */}
+              {/* 6th card — price teaser */}
               <FadeIn delay={0.4}>
                 <div
                   className="rounded-2xl p-7 h-full flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-400"
@@ -356,12 +399,13 @@ function App() {
         </section>
 
         {/* ══════════════════════════════════════
-            PDF PREVIEW GALLERY
+            PDF PREVIEW GALLERY — VISUAL CENTERPIECE
         ══════════════════════════════════════ */}
         <section id="gallery" className="py-32 relative overflow-hidden">
+          {/* Ambient background glow */}
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ background: `radial-gradient(ellipse 80% 60% at 50% 50%, ${GOLD}07 0%, transparent 70%)` }}
+            style={{ background: `radial-gradient(ellipse 80% 70% at 50% 50%, ${GOLD}09 0%, transparent 70%)` }}
           />
 
           <FadeIn className="text-center mb-20 px-6">
@@ -376,59 +420,45 @@ function App() {
             </p>
           </FadeIn>
 
-          {/* Gallery */}
-          <div className="relative">
-            <div
-              className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-              style={{ background: "linear-gradient(to right, #050505, transparent)" }}
-            />
-            <div
-              className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-              style={{ background: "linear-gradient(to left, #050505, transparent)" }}
-            />
+          {/* Three large cards — centered, prominent */}
+          <div className="flex items-end justify-center gap-6 md:gap-10 px-6 flex-wrap md:flex-nowrap">
+            {/* Left card — slightly lower */}
+            <div className="mt-8 md:mt-16">
+              <PDFPreviewCard img={previewPages[0].img} label={previewPages[0].label} delay={0} />
+            </div>
 
-            <div
-              ref={galleryRef}
-              className="flex gap-6 overflow-x-auto pb-8 px-16 md:px-32"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {[
-                "Cover",
-                "Introduction",
-                "Digital Thinking",
-                "Asset Building",
-                "Execution Systems",
-                "Digital Identity",
-                "Long-Term Leverage",
-                "Action Plan",
-              ].map((label, i) => (
-                <PDFCard key={i} index={i} label={label} delay={i * 0.06} />
-              ))}
+            {/* Center card — elevated, biggest */}
+            <div className="md:-mt-8">
+              <PDFPreviewCard img={previewPages[1].img} label={previewPages[1].label} delay={0.12} featured />
+            </div>
+
+            {/* Right card — slightly lower */}
+            <div className="mt-8 md:mt-16">
+              <PDFPreviewCard img={previewPages[2].img} label={previewPages[2].label} delay={0.24} />
             </div>
           </div>
 
-          {/* Arrows */}
-          <div className="flex justify-center gap-3 mt-6">
-            {(["left", "right"] as const).map((dir) => (
-              <button
-                key={dir}
-                data-testid={`button-gallery-${dir}`}
-                onClick={() => scrollGallery(dir)}
-                className="w-10 h-10 rounded-full flex items-center justify-center text-sm transition-all duration-200"
-                style={{ border: `1px solid ${GOLD}33`, color: `${GOLD}88`, background: "rgba(255,255,255,0.02)" }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}77`;
-                  (e.currentTarget as HTMLButtonElement).style.color = GOLD_LIGHT;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}33`;
-                  (e.currentTarget as HTMLButtonElement).style.color = `${GOLD}88`;
-                }}
-              >
-                {dir === "left" ? "←" : "→"}
-              </button>
-            ))}
-          </div>
+          {/* CTA below gallery */}
+          <FadeIn className="text-center mt-16 px-6" delay={0.3}>
+            <button
+              data-testid="button-get-copy-gallery"
+              onClick={() => scrollToSection("pricing")}
+              className="inline-flex items-center justify-center px-10 py-4 rounded-full font-semibold text-sm uppercase tracking-widest transition-all duration-300"
+              style={{ border: `1px solid ${GOLD}44`, color: GOLD, background: "transparent" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background = `${GOLD}10`;
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 28px ${GOLD}28`;
+                (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}88`;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = "";
+                (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}44`;
+              }}
+            >
+              Get The Digital Foundation — Free
+            </button>
+          </FadeIn>
         </section>
 
         {/* ══════════════════════════════════════
@@ -530,7 +560,6 @@ function App() {
             FINAL CTA
         ══════════════════════════════════════ */}
         <section className="py-40 px-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
-          {/* Background glow */}
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] rounded-full pointer-events-none"
             style={{ background: `radial-gradient(ellipse, ${GOLD}0A 0%, transparent 70%)` }}

@@ -259,7 +259,7 @@ function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 4 }}
-            className="absolute bottom-10 flex flex-col items-center gap-3"
+            className="absolute bottom-4 flex flex-col items-center gap-3"
             style={{ color: `${GOLD}77` }}
           >
             <span className="text-xs tracking-[0.35em] uppercase font-semibold">Scroll</span>

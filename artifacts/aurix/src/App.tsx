@@ -672,17 +672,9 @@ function App() {
           </FadeIn>
 
           <FadeIn delay={0.45}>
-            <div className="flex flex-col items-center gap-3">
-              <div
-                className="font-[Outfit] text-3xl font-black tracking-[0.4em] text-white"
-                style={{ textShadow: `0 0 20px ${GOLD}44` }}
-              >
-                AURIX
-              </div>
-              <p className="text-xs tracking-[0.3em] uppercase" style={{ color: `${GOLD}55` }}>
-                AURIX.CO
-              </p>
-            </div>
+            <p className="text-xs tracking-[0.3em] uppercase" style={{ color: `${GOLD}55` }}>
+              AURIX.CO
+            </p>
           </FadeIn>
         </section>
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ParticleBackground } from "./components/ParticleBackground";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import coverImg from "@assets/IMG_9239_1783109906529.jpg";
@@ -53,121 +53,222 @@ const previewPages = [
   { img: pageImg, label: "The Correct Order" },
 ];
 
-function PDFPreviewCard({
-  img,
-  label,
-  delay = 0,
-  featured = false,
-}: {
-  img: string;
-  label: string;
-  delay?: number;
-  featured?: boolean;
-}) {
+const SLIDE_VARIANTS = {
+  enter: (dir: number) => ({
+    x: dir > 0 ? 80 : -80,
+    opacity: 0,
+    scale: 0.97,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.55, ease: [0.32, 0.72, 0, 1] },
+  },
+  exit: (dir: number) => ({
+    x: dir > 0 ? -80 : 80,
+    opacity: 0,
+    scale: 0.97,
+    transition: { duration: 0.4, ease: [0.32, 0.72, 0, 1] },
+  }),
+};
+
+function PDFSlider({ pages }: { pages: { img: string; label: string }[] }) {
+  const [[index, direction], setSlide] = useState([0, 0]);
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
+
+  const paginate = (dir: number) => {
+    setSlide(([prev]) => [(prev + dir + pages.length) % pages.length, dir]);
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = cardRef.current;
     if (!card) return;
     const rect = card.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / (rect.width / 2);
-    const dy = (e.clientY - cy) / (rect.height / 2);
-    setTilt({ x: -dy * 8, y: dx * 8 });
-  };
-
-  const handleMouseLeave = () => {
-    setHovered(false);
-    setTilt({ x: 0, y: 0 });
+    const dx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+    const dy = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+    setTilt({ x: -dy * 6, y: dx * 6 });
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 48 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 1, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className="flex flex-col items-center"
-      style={{ perspective: "1000px", flexShrink: 0 }}
-    >
-      <div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          width: featured ? "clamp(260px, 28vw, 380px)" : "clamp(220px, 22vw, 300px)",
-          aspectRatio: "1 / 1.414",
-          transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) ${hovered ? "translateY(-12px) scale(1.03)" : "translateY(0) scale(1)"}`,
-          transition: hovered
-            ? "transform 0.12s ease-out, box-shadow 0.3s ease, border 0.3s ease"
-            : "transform 0.6s cubic-bezier(0.21,0.47,0.32,0.98), box-shadow 0.5s ease, border 0.4s ease",
-          borderRadius: "20px",
-          overflow: "hidden",
-          background: "rgba(255,255,255,0.03)",
-          border: hovered ? `1px solid ${GOLD}66` : `1px solid ${GOLD}22`,
-          boxShadow: hovered
-            ? `0 40px 100px rgba(0,0,0,0.8), 0 0 60px ${GOLD}28, inset 0 1px 0 ${GOLD}22`
-            : `0 20px 60px rgba(0,0,0,0.6), 0 0 20px ${GOLD}0A`,
-          cursor: "default",
-          backdropFilter: "blur(8px)",
-          willChange: "transform",
-        }}
-      >
-        {/* Actual PDF preview image */}
-        <img
-          src={img}
-          alt={label}
-          draggable={false}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "top",
-            display: "block",
-            userSelect: "none",
-          }}
-        />
+    <div className="flex flex-col items-center gap-10">
+      {/* Slider stage */}
+      <div className="flex items-center gap-6 md:gap-10 w-full justify-center">
 
-        {/* Gold shimmer overlay on hover */}
+        {/* Left arrow */}
+        <button
+          data-testid="button-slider-prev"
+          onClick={() => paginate(-1)}
+          className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-250"
+          style={{
+            border: `1px solid ${GOLD}33`,
+            color: `${GOLD}99`,
+            background: "rgba(255,255,255,0.02)",
+            backdropFilter: "blur(8px)",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}88`;
+            (e.currentTarget as HTMLButtonElement).style.color = GOLD_LIGHT;
+            (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 20px ${GOLD}22`;
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}33`;
+            (e.currentTarget as HTMLButtonElement).style.color = `${GOLD}99`;
+            (e.currentTarget as HTMLButtonElement).style.boxShadow = "";
+          }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+
+        {/* Card viewport */}
         <div
           style={{
-            position: "absolute",
-            inset: 0,
-            background: `linear-gradient(135deg, ${GOLD}0A 0%, transparent 50%, ${GOLD}06 100%)`,
-            opacity: hovered ? 1 : 0,
-            transition: "opacity 0.4s ease",
-            pointerEvents: "none",
+            position: "relative",
+            width: "clamp(280px, 38vw, 520px)",
+            aspectRatio: "1 / 1.414",
+            perspective: "1200px",
+            overflow: "hidden",
           }}
-        />
+        >
+          <AnimatePresence initial={false} custom={direction} mode="popLayout">
+            <motion.div
+              key={index}
+              custom={direction}
+              variants={SLIDE_VARIANTS}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              style={{
+                position: "absolute",
+                inset: 0,
+                perspective: "1200px",
+              }}
+            >
+              <div
+                ref={cardRef}
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => { setHovered(false); setTilt({ x: 0, y: 0 }); }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "20px",
+                  overflow: "hidden",
+                  background: "rgba(255,255,255,0.03)",
+                  border: hovered ? `1px solid ${GOLD}66` : `1px solid ${GOLD}22`,
+                  boxShadow: hovered
+                    ? `0 48px 120px rgba(0,0,0,0.85), 0 0 70px ${GOLD}28, inset 0 1px 0 ${GOLD}18`
+                    : `0 24px 80px rgba(0,0,0,0.7), 0 0 30px ${GOLD}0D`,
+                  transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) ${hovered ? "translateY(-8px) scale(1.02)" : ""}`,
+                  transition: hovered
+                    ? "transform 0.1s ease-out, box-shadow 0.3s ease, border 0.3s ease"
+                    : "transform 0.55s cubic-bezier(0.21,0.47,0.32,0.98), box-shadow 0.5s ease, border 0.4s ease",
+                  backdropFilter: "blur(8px)",
+                  cursor: "default",
+                  willChange: "transform",
+                }}
+              >
+                <img
+                  src={pages[index].img}
+                  alt={pages[index].label}
+                  draggable={false}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "top",
+                    display: "block",
+                    userSelect: "none",
+                  }}
+                />
+                {/* Hover shimmer */}
+                <div style={{
+                  position: "absolute", inset: 0,
+                  background: `linear-gradient(135deg, ${GOLD}09 0%, transparent 50%, ${GOLD}06 100%)`,
+                  opacity: hovered ? 1 : 0,
+                  transition: "opacity 0.4s ease",
+                  pointerEvents: "none",
+                }} />
+                {/* Corner glow */}
+                <div style={{
+                  position: "absolute", top: 0, right: 0, width: "100px", height: "100px",
+                  background: `radial-gradient(circle at top right, ${GOLD}1A, transparent 70%)`,
+                  pointerEvents: "none",
+                }} />
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
-        {/* Top-right corner glow */}
-        <div
+        {/* Right arrow */}
+        <button
+          data-testid="button-slider-next"
+          onClick={() => paginate(1)}
+          className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-250"
           style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            width: "80px",
-            height: "80px",
-            background: `radial-gradient(circle at top right, ${GOLD}20, transparent 70%)`,
-            pointerEvents: "none",
+            border: `1px solid ${GOLD}33`,
+            color: `${GOLD}99`,
+            background: "rgba(255,255,255,0.02)",
+            backdropFilter: "blur(8px)",
           }}
-        />
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}88`;
+            (e.currentTarget as HTMLButtonElement).style.color = GOLD_LIGHT;
+            (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 20px ${GOLD}22`;
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}33`;
+            (e.currentTarget as HTMLButtonElement).style.color = `${GOLD}99`;
+            (e.currentTarget as HTMLButtonElement).style.boxShadow = "";
+          }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
       </div>
 
       {/* Label */}
-      <motion.p
-        animate={{ opacity: hovered ? 1 : 0.45 }}
-        transition={{ duration: 0.3 }}
-        className="mt-4 text-xs tracking-[0.25em] uppercase font-semibold text-center"
-        style={{ color: GOLD_MID }}
-      >
-        {label}
-      </motion.p>
-    </motion.div>
+      <AnimatePresence mode="wait">
+        <motion.p
+          key={index}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.3 }}
+          className="text-xs tracking-[0.3em] uppercase font-semibold"
+          style={{ color: GOLD_MID }}
+        >
+          {pages[index].label}
+        </motion.p>
+      </AnimatePresence>
+
+      {/* Pagination dots */}
+      <div className="flex items-center gap-2.5">
+        {pages.map((_, i) => (
+          <button
+            key={i}
+            data-testid={`button-slider-dot-${i}`}
+            onClick={() => setSlide(([prev]) => [i, i > prev ? 1 : -1])}
+            style={{
+              width: i === index ? "24px" : "8px",
+              height: "8px",
+              borderRadius: "4px",
+              background: i === index ? GOLD : `${GOLD}33`,
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              transition: "all 0.35s cubic-bezier(0.32,0.72,0,1)",
+              boxShadow: i === index ? `0 0 10px ${GOLD}66` : "none",
+            }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -420,44 +521,8 @@ function App() {
             </p>
           </FadeIn>
 
-          {/* Three large cards — centered, prominent */}
-          <div className="flex items-end justify-center gap-6 md:gap-10 px-6 flex-wrap md:flex-nowrap">
-            {/* Left card — slightly lower */}
-            <div className="mt-8 md:mt-16">
-              <PDFPreviewCard img={previewPages[0].img} label={previewPages[0].label} delay={0} />
-            </div>
-
-            {/* Center card — elevated, biggest */}
-            <div className="md:-mt-8">
-              <PDFPreviewCard img={previewPages[1].img} label={previewPages[1].label} delay={0.12} featured />
-            </div>
-
-            {/* Right card — slightly lower */}
-            <div className="mt-8 md:mt-16">
-              <PDFPreviewCard img={previewPages[2].img} label={previewPages[2].label} delay={0.24} />
-            </div>
-          </div>
-
-          {/* CTA below gallery */}
-          <FadeIn className="text-center mt-16 px-6" delay={0.3}>
-            <button
-              data-testid="button-get-copy-gallery"
-              onClick={() => scrollToSection("pricing")}
-              className="inline-flex items-center justify-center px-10 py-4 rounded-full font-semibold text-sm uppercase tracking-widest transition-all duration-300"
-              style={{ border: `1px solid ${GOLD}44`, color: GOLD, background: "transparent" }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = `${GOLD}10`;
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 28px ${GOLD}28`;
-                (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}88`;
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = "transparent";
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = "";
-                (e.currentTarget as HTMLButtonElement).style.borderColor = `${GOLD}44`;
-              }}
-            >
-              Get The Digital Foundation — Free
-            </button>
+          <FadeIn className="px-6">
+            <PDFSlider pages={previewPages} />
           </FadeIn>
         </section>
 

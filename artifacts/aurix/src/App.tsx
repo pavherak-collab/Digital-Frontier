@@ -297,18 +297,39 @@ function App() {
           <motion.div
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
+            transition={{ duration: 1.2, delay: 2.2 }}
             onAnimationComplete={() => (document.body.style.overflow = "unset")}
-            className="fixed inset-0 z-50 bg-background flex items-center justify-center"
+            className="fixed inset-0 z-50 bg-background flex flex-col items-center justify-center gap-8"
           >
+            {/* Wordmark */}
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="tracking-[0.5em] text-sm uppercase"
+              initial={{ opacity: 0, letterSpacing: "0.8em" }}
+              animate={{ opacity: 1, letterSpacing: "0.35em" }}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+              className="font-[Outfit] text-sm font-bold uppercase"
               style={{ color: GOLD }}
             >
-              Initializing...
+              AURIX.CO
+            </motion.div>
+
+            {/* Divider line */}
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="h-px w-16"
+              style={{ background: `linear-gradient(to right, transparent, ${GOLD}88, transparent)`, transformOrigin: "center" }}
+            />
+
+            {/* Presents line */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              className="text-xs tracking-[0.5em] uppercase font-light"
+              style={{ color: `${GOLD}70` }}
+            >
+              presents
             </motion.div>
           </motion.div>
         )}

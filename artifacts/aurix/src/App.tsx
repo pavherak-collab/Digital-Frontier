@@ -650,28 +650,6 @@ function App() {
           </FadeIn>
 
           <FadeIn delay={0.3}>
-            <button
-              data-testid="button-get-copy-final"
-              className="inline-flex items-center justify-center px-10 py-5 rounded-full font-bold text-sm uppercase tracking-widest transition-all duration-300 mb-14"
-              style={{
-                background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_MID} 50%, ${GOLD_LIGHT} 100%)`,
-                color: "#050505",
-                boxShadow: `0 0 36px ${GOLD}55, 0 8px 24px rgba(0,0,0,0.4)`,
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 55px ${GOLD}88, 0 12px 40px rgba(0,0,0,0.5)`;
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 36px ${GOLD}55, 0 8px 24px rgba(0,0,0,0.4)`;
-                (e.currentTarget as HTMLButtonElement).style.transform = "";
-              }}
-            >
-              Get Your Copy
-            </button>
-          </FadeIn>
-
-          <FadeIn delay={0.45}>
             <p className="text-xs tracking-[0.3em] uppercase" style={{ color: `${GOLD}55` }}>
               AURIX.CO
             </p>

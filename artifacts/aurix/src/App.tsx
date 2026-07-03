@@ -259,15 +259,15 @@ function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 4 }}
-            className="absolute bottom-10 flex flex-col items-center gap-2"
-            style={{ color: `${GOLD}40` }}
+            className="absolute bottom-10 flex flex-col items-center gap-3"
+            style={{ color: `${GOLD}77` }}
           >
-            <span className="text-[10px] tracking-[0.3em] uppercase">Scroll</span>
+            <span className="text-xs tracking-[0.35em] uppercase font-semibold">Scroll</span>
             <motion.div
-              animate={{ y: [0, 6, 0] }}
+              animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-              className="w-px h-8"
-              style={{ background: `linear-gradient(to bottom, ${GOLD}50, transparent)` }}
+              className="w-0.5 h-16"
+              style={{ background: `linear-gradient(to bottom, ${GOLD}BB, transparent)` }}
             />
           </motion.div>
         </section>

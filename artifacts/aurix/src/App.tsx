@@ -650,7 +650,7 @@ function App() {
           </FadeIn>
 
           <FadeIn delay={0.3}>
-            <p className="text-xs tracking-[0.3em] uppercase" style={{ color: `${GOLD}55` }}>
+            <p className="text-base tracking-[0.4em] uppercase font-semibold" style={{ color: `${GOLD}77` }}>
               AURIX.CO
             </p>
           </FadeIn>

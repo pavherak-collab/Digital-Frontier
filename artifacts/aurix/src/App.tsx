@@ -326,7 +326,7 @@ function App() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="text-xs tracking-[0.5em] uppercase font-light"
+              className="text-base tracking-[0.5em] uppercase font-light"
               style={{ color: `${GOLD}70` }}
             >
               presents

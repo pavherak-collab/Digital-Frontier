@@ -614,25 +614,29 @@ function App() {
           </FadeIn>
 
           <FadeIn delay={0.2}>
-            <button
+            <a
               data-testid="button-download-foundation"
+              href="https://www.dropbox.com/scl/fi/tjaxh4cyg7adeuhekmh7q/AURIX.CO_TheDigitalFoundation_Premium.pdf?rlkey=af975ndtjy9lclp1vocehkc2a&st=w4323go5&dl=1"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-12 py-5 rounded-full font-bold text-sm uppercase tracking-widest transition-all duration-300 mb-5"
               style={{
                 background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_MID} 50%, ${GOLD_LIGHT} 100%)`,
                 color: "#050505",
                 boxShadow: `0 0 40px ${GOLD}55, 0 12px 32px rgba(0,0,0,0.5)`,
+                textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 60px ${GOLD}88, 0 16px 48px rgba(0,0,0,0.6)`;
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 0 60px ${GOLD}88, 0 16px 48px rgba(0,0,0,0.6)`;
+                (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 40px ${GOLD}55, 0 12px 32px rgba(0,0,0,0.5)`;
-                (e.currentTarget as HTMLButtonElement).style.transform = "";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 0 40px ${GOLD}55, 0 12px 32px rgba(0,0,0,0.5)`;
+                (e.currentTarget as HTMLAnchorElement).style.transform = "";
               }}
             >
               Download The Digital Foundation
-            </button>
+            </a>
           </FadeIn>
 
           <FadeIn delay={0.3}>

@@ -277,12 +277,25 @@ function App() {
   const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%", "20%"]);
 
   const [loading, setLoading] = useState(true);
+  const [downloadCount, setDownloadCount] = useState<number | null>(null);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
     const t = setTimeout(() => setLoading(false), 2000);
+    // Fetch current download count
+    fetch("/api/downloads")
+      .then((r) => r.json())
+      .then((d) => setDownloadCount(d.count))
+      .catch(() => {});
     return () => clearTimeout(t);
   }, []);
+
+  const handleDownload = () => {
+    fetch("/api/downloads", { method: "POST" })
+      .then((r) => r.json())
+      .then((d) => setDownloadCount(d.count))
+      .catch(() => {});
+  };
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -619,6 +632,7 @@ function App() {
               href="https://www.dropbox.com/scl/fi/tjaxh4cyg7adeuhekmh7q/AURIX.CO_TheDigitalFoundation_Premium.pdf?rlkey=af975ndtjy9lclp1vocehkc2a&st=w4323go5&dl=1"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleDownload}
               className="inline-flex items-center justify-center px-12 py-5 rounded-full font-bold text-sm uppercase tracking-widest transition-all duration-300 mb-5"
               style={{
                 background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_MID} 50%, ${GOLD_LIGHT} 100%)`,
@@ -644,6 +658,31 @@ function App() {
               Instant download. No account required.
             </p>
           </FadeIn>
+
+          {downloadCount !== null && (
+            <FadeIn delay={0.4}>
+              <div
+                className="flex items-center gap-2 mt-4"
+                style={{ color: `${GOLD}77` }}
+              >
+                <div className="flex -space-x-1">
+                  {[...Array(3)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-5 h-5 rounded-full"
+                      style={{
+                        background: `linear-gradient(135deg, ${GOLD}44, ${GOLD}22)`,
+                        border: `1px solid ${GOLD}55`,
+                      }}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs tracking-widest uppercase font-semibold">
+                  {downloadCount.toLocaleString()} {downloadCount === 1 ? "person" : "people"} downloaded
+                </span>
+              </div>
+            </FadeIn>
+          )}
         </section>
 
         {/* ══════════════════════════════════════

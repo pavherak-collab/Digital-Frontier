@@ -661,26 +661,12 @@ function App() {
 
           {downloadCount !== null && (
             <FadeIn delay={0.4}>
-              <div
-                className="flex items-center gap-2 mt-4"
-                style={{ color: `${GOLD}77` }}
+              <p
+                className="text-xs tracking-widest uppercase font-semibold mt-4"
+                style={{ color: `${GOLD}66` }}
               >
-                <div className="flex -space-x-1">
-                  {[...Array(3)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-5 h-5 rounded-full"
-                      style={{
-                        background: `linear-gradient(135deg, ${GOLD}44, ${GOLD}22)`,
-                        border: `1px solid ${GOLD}55`,
-                      }}
-                    />
-                  ))}
-                </div>
-                <span className="text-xs tracking-widest uppercase font-semibold">
-                  {downloadCount.toLocaleString()} {downloadCount === 1 ? "person" : "people"} downloaded
-                </span>
-              </div>
+                {downloadCount.toLocaleString()} {downloadCount === 1 ? "person" : "people"} downloaded
+              </p>
             </FadeIn>
           )}
         </section>

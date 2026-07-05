@@ -1,6 +1,6 @@
 kind = "web"
 previewPath = "/"
-title = "AURIX — The Digital Foundation"
+title = "AURIX.CO — The Digital Foundation"
 version = "1.0.0"
 id = "artifacts/aurix"
 router = "path"

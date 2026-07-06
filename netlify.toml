@@ -1,0 +1,12 @@
+[build]
+  command   = "pnpm --filter @workspace/aurix run build"
+  publish   = "artifacts/aurix/dist/public"
+
+[build.environment]
+  NODE_VERSION = "24"
+  BASE_PATH    = "/"
+
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200

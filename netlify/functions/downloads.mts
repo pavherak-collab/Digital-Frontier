@@ -1,20 +1,7 @@
 import type { Config } from "@netlify/functions";
-import pg from "pg";
-
-const { Pool } = pg;
-
-let pool: InstanceType<typeof Pool> | null = null;
-
-function getPool() {
-  if (!pool) {
-    pool = new Pool({ connectionString: process.env.DATABASE_URL });
-  }
-  return pool;
-}
+import { getStore } from "@netlify/blobs";
 
 export default async (req: Request): Promise<Response> => {
-  const db = getPool();
-
   const headers = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
@@ -26,27 +13,19 @@ export default async (req: Request): Promise<Response> => {
   }
 
   try {
+    const store = getStore("downloads");
+
     if (req.method === "GET") {
-      const result = await db.query<{ count: number }>(
-        "SELECT count FROM downloads WHERE id = 1"
-      );
-      const count = result.rows[0]?.count ?? 0;
-      return new Response(JSON.stringify({ count: Number(count) }), {
-        status: 200,
-        headers,
-      });
+      const raw = await store.get("count");
+      const count = raw ? Number(raw) : 0;
+      return new Response(JSON.stringify({ count }), { status: 200, headers });
     }
 
     if (req.method === "POST") {
-      const result = await db.query<{ count: number }>(
-        `INSERT INTO downloads (id, count)
-         VALUES (1, 1)
-         ON CONFLICT (id) DO UPDATE
-           SET count = downloads.count + 1
-         RETURNING count`
-      );
-      const count = result.rows[0]?.count ?? 1;
-      return new Response(JSON.stringify({ count: Number(count) }), {
+      const raw = await store.get("count");
+      const next = (raw ? Number(raw) : 0) + 1;
+      await store.set("count", String(next));
+      return new Response(JSON.stringify({ count: next }), {
         status: 200,
         headers,
       });
